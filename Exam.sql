@@ -1,83 +1,25 @@
-CREATE TABLE Department (
-    DeptID INT PRIMARY KEY,
-    DeptName VARCHAR(50)
-);
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score, classification_report
 
-CREATE TABLE EmployeePersonal (
-    EmpID INT PRIMARY KEY,
-    EmpName VARCHAR(50),
-    Age INT,
-    DeptID INT,
-    FOREIGN KEY (DeptID) REFERENCES Department(DeptID)
-);
+data = load_iris()
+X = data.data
+y = data.target
 
-CREATE TABLE Salary (
-    EmpID INT,
-    BasicSalary DECIMAL(10,2),
-    Incentive DECIMAL(10,2),
-    TotalSalary DECIMAL(10,2),
-    FOREIGN KEY (EmpID) REFERENCES EmployeePersonal(EmpID)
-);
-INSERT INTO Department VALUES
-(1, 'HR'),
-(2, 'IT'),
-(3, 'Finance');
-
-INSERT INTO EmployeePersonal VALUES
-(101, 'Arun', 25, 2),
-(102, 'Priya', 28, 1),
-(103, 'Kumar', 30, 3);
-
-INSERT INTO Salary VALUES
-(101, 30000, 2000, 32000),
-(102, 25000, 1500, 26500),
-(103, 40000, 3000, 43000);
-SELECT 
-    MIN(TotalSalary) AS Minimum_Salary,
-    MAX(TotalSalary) AS Maximum_Salary,
-    SUM(TotalSalary) AS Total_Salary,
-    AVG(TotalSalary) AS Average_Salary
-FROM Salary;
-..........
--- Create Table
-CREATE TABLE Salary (
-    EmpID INT PRIMARY KEY,
-    BasicSalary DECIMAL(10,2),
-    Incentive DECIMAL(10,2),
-    TotalSalary DECIMAL(10,2)
-);
-
--- Insert Sample Data
-INSERT INTO Salary VALUES
-(101, 20000, 2000, 22000),
-(102, 25000, 3000, 28000);
-
--- Create Stored Procedure
-DELIMITER //
-
-CREATE PROCEDURE UpdateSalary(
-    IN emp_id INT,
-    IN incentive_amt DECIMAL(10,2),
-    OUT new_salary DECIMAL(10,2)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=1
 )
-BEGIN
-    -- Update salary
-    UPDATE Salary
-    SET 
-        Incentive = Incentive + incentive_amt,
-        TotalSalary = BasicSalary + Incentive + incentive_amt
-    WHERE EmpID = emp_id;
 
-    -- Get updated salary
-    SELECT TotalSalary INTO new_salary
-    FROM Salary
-    WHERE EmpID = emp_id;
-END //
+model = GaussianNB()
 
-DELIMITER ;
+model.fit(X_train, y_train)
 
--- Call Procedure
-CALL UpdateSalary(101, 1000, @new_salary);
+y_pred = model.predict(X_test)
 
--- Show Result
-SELECT @new_salary;
+print("Predicted Values:", y_pred)
+print("Actual Values   :", y_test)
+print("Accuracy:", accuracy_score(y_test, y_pred) * 100)
+
+print("\nClassification Report:\n")
+print(classification_report(y_test, y_pred))
