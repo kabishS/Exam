@@ -1,25 +1,13 @@
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import GaussianNB
-from sklearn.metrics import accuracy_score, classification_report
+<?php
+// Set the default timezone
+date_default_timezone_set("Asia/Kolkata");
 
-data = load_iris()
-X = data.data
-y = data.target
+// Display current date
+echo "Current Date: " . date("d-m-Y") . "<br>";
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=1
-)
+// Display current time
+echo "Current Time: " . date("h:i:s A") . "<br>";
 
-model = GaussianNB()
-
-model.fit(X_train, y_train)
-
-y_pred = model.predict(X_test)
-
-print("Predicted Values:", y_pred)
-print("Actual Values   :", y_test)
-print("Accuracy:", accuracy_score(y_test, y_pred) * 100)
-
-print("\nClassification Report:\n")
-print(classification_report(y_test, y_pred))
+// Display current day
+echo "Current Day: " . date("l");
+?>
