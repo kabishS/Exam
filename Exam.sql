@@ -1,13 +1,38 @@
-<?php
-// Set the default timezone
-date_default_timezone_set("Asia/Kolkata");
+echo "Enter a number:"
+read num
 
-// Display current date
-echo "Current Date: " . date("d-m-Y") . "<br>";
+if [ $num -gt 0 ]
+then
+    echo "Number is Positive"
+elif [ $num -lt 0 ]
+then
+    echo "Number is Negative"
+else
+    echo "Number is Zero"
+fi
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#include <stdio.h>
 
-// Display current time
-echo "Current Time: " . date("h:i:s A") . "<br>";
+int semaphore = 1;
 
-// Display current day
-echo "Current Day: " . date("l");
-?>
+void wait() {
+    semaphore--;
+    printf("Process entered critical section\n");
+}
+
+void signal() {
+    semaphore++;
+    printf("Process exited critical section\n");
+}
+
+int main() {
+    printf("Initial semaphore value: %d\n", semaphore);
+
+    wait();
+    printf("Semaphore value after wait: %d\n", semaphore);
+
+    signal();
+    printf("Semaphore value after signal: %d\n", semaphore);
+
+    return 0;
+}
